@@ -1,12 +1,22 @@
 package com.netaporter.shop
 
 case class Basket(items: Map[Product, Int]) {
-  // TODO: Implement
-  def add(item: Product, qty: Int): Basket = ???
+  def add(item: Product, qty: Int): Basket = {
+    val sumQuantity = qty + items.getOrElse(item, 0)
+    Basket(items.updated(item, sumQuantity))
+  }
 
-  // TODO: Implement
-  def remove(item: Product, qty: Int): Basket = ???
+  def remove(item: Product, qty: Int): Basket = {
+    require(items.contains(item))
+    require(items(item) >= qty)
+    val reducedQuantity = items(item) - qty
+    Basket(items.updated(item, reducedQuantity))
+  }
 
-  // TODO: Implement
-  def total: Double = ???
+  def total: Double =
+    items
+    .map { case (item: Product, qty: Int) => qty * item.price }
+    .sum
+    .toDouble
+
 }
