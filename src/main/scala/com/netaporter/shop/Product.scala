@@ -1,4 +1,3 @@
 package com.netaporter.shop
 
-// TODO: Add extra fields as necessary
-case class Product(/* ... */)
+case class Product(id: Int, name: String, price: BigDecimal)
