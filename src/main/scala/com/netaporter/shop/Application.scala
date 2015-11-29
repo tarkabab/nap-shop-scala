@@ -52,10 +52,13 @@ object Application {
           catalogue.products.foreach(println)
 
         case "basket" :: _ =>
-          basket.items.foreach {
-            case (product, qty) =>
-              println(qty + "x " + product)
-          }
+          if(basket.items.isEmpty)
+            println("Your basket is empty!")
+          else
+            basket.items.toSeq.sortBy(_._1).foreach {
+              case (product, qty) =>
+                println(qty + "x " + product)
+            }
 
         case "total" :: _ =>
           println("Total: £" + basket.total)

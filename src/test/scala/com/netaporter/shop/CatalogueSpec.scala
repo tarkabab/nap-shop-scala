@@ -55,7 +55,7 @@ class CatalogueSpec extends FunSpec {
       val product = searchResult.get
       assert(product.id == searchId)
     }
-    it("should return None when a Product with the given id does not exists") {
+    it("should return None when Product with the given id does not exist") {
       val searchId = 4
 
       val catalogue = Catalogue.parse(productStringSequence)

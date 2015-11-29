@@ -10,25 +10,28 @@ class BasketSpec extends FunSpec {
   val product3 = Product(3, "dummy product 3", BigDecimal(100.00))
 
   describe("The add method") {
-    it("should return a Basket with the quantity of items added") {
+    it("should return a Basket with the quantity of item added") {
       val product = product1
       val quantity = 5
 
       val basket = emptyBasket.add(product, quantity)
-      assert(basket.items(product) == quantity, "Quantity of items added to empty Basket does not match")
+      assert(basket.items(product) == quantity, "Quantity of item added to empty Basket does not match")
 
       val basket2 = basket.add(product, quantity)
-      assert(basket2.items(product) == 2 * quantity, "Quantity of items added twice does not match")
+      assert(basket2.items(product) == 2 * quantity, "Quantity of item added twice does not match")
     }
     it("should throw IllegalArgumentException for 0 or negative quantities") {
-      val exception = intercept[IllegalArgumentException] {
+      val exception1 = intercept[IllegalArgumentException] {
         emptyBasket.add(product1, -5)
+      }
+      val exception2 = intercept[IllegalArgumentException] {
+        emptyBasket.add(product1, 0)
       }
     }
   }
 
   describe("The remove method") {
-    it("should return a Basket, with the quantity of items removed") {
+    it("should return a Basket, with the quantity of item removed") {
       val product = product1
       val quantity = 5
       val removedQuantity = 2
@@ -37,11 +40,19 @@ class BasketSpec extends FunSpec {
       val basket = emptyBasket
         .add(product, quantity)
         .remove(product, removedQuantity)
-      assert(basket.items(product) == expectedQuantity, "Quantity of items removed from Basket does not match")
+      assert(basket.items(product) == expectedQuantity, "Quantity of item removed from Basket does not match")
 
       val basket2 = basket
         .remove(product, removedQuantity)
-      assert(basket2.items(product) == quantity - 2 * removedQuantity, "Quantity of items removed twice from Basket does not match")
+      assert(basket2.items(product) == quantity - 2 * removedQuantity, "Quantity of item removed twice from Basket does not match")
+    }
+    it("should remove the item from the Basket completely, when the quantity is zero") {
+      val quantity = 3
+      val basket = emptyBasket
+        .add(product3, quantity)
+        .remove(product3, quantity)
+
+      assert(!basket.contains(product3))
     }
     it("should throw IllegalArgumentException, when the item is not in the Basket") {
       val product = product1
@@ -51,7 +62,7 @@ class BasketSpec extends FunSpec {
         emptyBasket.remove(product, quantity)
       }
     }
-    it("should throw IllegalArgumentException, when the quantity of items in the Basket is less than the quantity to be removed") {
+    it("should throw IllegalArgumentException, when the quantity of item in the Basket is less than the quantity of item to be removed") {
       val product = product1
       val quantity = 5
       val removedQuantity = 10
@@ -79,7 +90,7 @@ class BasketSpec extends FunSpec {
         quantity2 * product2.price +
         quantity3 * product3.price
 
-      assert(basket.total == expectedSum, "Sum value of Products does not match with expected value")
+      assert(basket.total == expectedSum, "Sum value of Basket does not match with expected value")
 
       assert(emptyBasket.total == 0)
     }
