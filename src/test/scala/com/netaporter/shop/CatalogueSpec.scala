@@ -7,6 +7,7 @@ class CatalogueSpec extends FunSpec {
   val productString1 = "1,Short Sleeve Jumper,£9.99"
   val productString2 = "2,Shoulder Bag,£9.99"
   val productString3 = "3,Skinny Jeans,£45.00"
+  val productString4 = "7,Piqué Polo shirt, £50.55"
   val productStringSequence = Seq(productString1, productString2, productString3)
 
   describe("The companion's load method") {
@@ -30,6 +31,9 @@ class CatalogueSpec extends FunSpec {
     it("should return Product wrapped in an Option from a string") {
       val parsed = Catalogue.parseProduct(productString1)
       assert(parsed.isDefined)
+
+      val parsed2 = Catalogue.parseProduct(productString4)
+      assert(parsed2.isDefined)
     }
     it("should return None when the string cannot be interpreted as a Product") {
       val line1 = "this line does not define a Product"

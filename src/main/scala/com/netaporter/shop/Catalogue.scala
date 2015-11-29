@@ -22,7 +22,7 @@ object Catalogue {
     // expected format: "3,Skinny Jeans,£45.00"
     line.split(',') match {
       case Array(id, name, prize) =>
-        Try(Product(id.toInt, name, BigDecimal(prize.drop(1)))).toOption
+        Try(Product(id.trim.toInt, name.trim, BigDecimal(prize.trim.drop(1)))).toOption
       case _ =>
         None
     }
