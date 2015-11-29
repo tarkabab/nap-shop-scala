@@ -1,6 +1,6 @@
 package com.netaporter.shop
 
-import scala.util.{Failure, Try}
+import scala.util.Try
 
 case class Catalogue(products: Seq[Product]) {
   def findProduct(id: Int): Option[Product] = products.find(_.id == id)
@@ -13,14 +13,19 @@ object Catalogue {
     parse(src.getLines.toList)
   }
 
-  def parse(csvLines: Seq[String]): Catalogue =  {
-    val parsedProducts: Seq[Try[Product]] = csvLines.map{ line =>
-      line.split(',') match {
-        case Array(id, name, prize) => Try(Product(id.toInt, name, BigDecimal(prize.drop(1))))
-        case _ => Failure(new IllegalArgumentException("Line does not define a Product: " + line))
-      }
-    }
-    val products = parsedProducts.filter(_.isSuccess).map(_.get)
+  private[shop] def parse(csvLines: Seq[String]): Catalogue =  {
+    val products = csvLines.flatMap(parseProduct)
     Catalogue(products)
   }
+
+  private[shop] def parseProduct(line: String): Option[Product] = {
+    // expected format: "3,Skinny Jeans,£45.00"
+    line.split(',') match {
+      case Array(id, name, prize) =>
+        Try(Product(id.toInt, name, BigDecimal(prize.drop(1)))).toOption
+      case _ =>
+        None
+    }
+  }
+
 }
