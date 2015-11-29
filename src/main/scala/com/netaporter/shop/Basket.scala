@@ -3,6 +3,7 @@ package com.netaporter.shop
 case class Basket(items: Map[Product, Int]) {
 
   def add(item: Product, qty: Int): Basket = {
+    require(qty > 0, "Quantity should be greater than zero")
     val sumQuantity = qty + items.getOrElse(item, 0)
     Basket(items.updated(item, sumQuantity))
   }
@@ -21,4 +22,7 @@ case class Basket(items: Map[Product, Int]) {
     .sum
     .toDouble
 
+  def contains(item: Product): Boolean = items.contains(item) && items(item) > 0
+
+  def count(item: Product): Int = items.getOrElse(item, 0)
 }

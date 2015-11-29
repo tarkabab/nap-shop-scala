@@ -5,7 +5,7 @@ package com.netaporter.shop
  */
 object Application {
   def main(args: Array[String]): Unit = {
-    val catalogue = Catalogue.load("catalogue.csv")
+    val catalogue = Catalogue.load("/catalogue.csv")
     var basket    = Basket(Map.empty)
 
     println("************************************")
@@ -34,12 +34,18 @@ object Application {
 
         case "remove" :: IntParam(productId) :: IntParam(qty) :: _ =>
           withProduct(catalogue, productId) { product =>
-            basket = basket.remove(product, qty)
+            if(basket.contains(product) && basket.count(product) >= qty)
+              basket = basket.remove(product, qty)
+            else
+              println(s"You have less than $qty ${product.name} in your basket!")
           }
 
         case "remove" :: IntParam(productId) :: _ =>
           withProduct(catalogue, productId) { product =>
-            basket = basket.remove(product, 1)
+            if(basket.contains(product) && basket.count(product) >= 1)
+              basket = basket.remove(product, 1)
+            else
+              println("You don't have this product in your basket!")
           }
 
         case "list" :: _ =>
